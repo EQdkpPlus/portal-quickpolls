@@ -156,7 +156,7 @@ class quickpolls_portal extends portal_generic {
 		foreach ($arrOptions as $key => $value){
 			$optionCount = (isset($arrVoteResult[$key])) ? $arrVoteResult[$key] : 0;
 			$optionProcent = ($count == 0) ? 0 : round(($optionCount / $count)*100);
-			$myout .= $this->jquery->progressbar('quickpolls_'.$this->id.'_'.$key, $optionProcent, array('text' => trim($value).': '.$optionCount.' (%percentage%)', 'txtalign' => 'left'))
+			$myout .= $this->jquery->ProgressBar('quickpolls_'.$this->id.'_'.$key, $optionProcent, trim($value).': '.$optionCount.' ('.$optionProcent.'%)', 'left');
 		}
 		
 
