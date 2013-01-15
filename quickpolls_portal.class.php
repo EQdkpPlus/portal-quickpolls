@@ -29,7 +29,7 @@ class quickpolls_portal extends portal_generic {
 	protected $path		= 'quickpolls';
 	protected $data		= array(
 		'name'			=> 'Quickpolls Module',
-		'version'		=> '0.1.0',
+		'version'		=> '0.1.1',
 		'author'		=> 'GodMod',
 		'contact'		=> EQDKP_PROJECT_URL,
 		'description'	=> 'Create a poll on your EQdkp Plus',
@@ -54,6 +54,7 @@ class quickpolls_portal extends portal_generic {
 			'language'	=> 'pk_quickpolls_closedate',
 			'property'	=> 'datepicker',
 			'help'		=> 'pk_quickpolls_closedate_help',
+			'allow_empty' => true,
 		),
 		'pk_quickpolls_showresults'	=> array(
 			'name'		=> 'pk_quickpolls_showresults',
@@ -99,7 +100,7 @@ class quickpolls_portal extends portal_generic {
 		if($this->config('pk_quickpolls_title')){
 			$this->header = sanitize($this->config('pk_quickpolls_title'));
 		}
-		$myout = '<table cellspacing="0" cellpadding="2"><tr><td>';
+		$myout = '<table cellspacing="0" cellpadding="2" width="100%"><tr><td>';
 		
 		$myout .= sanitize($this->config('pk_quickpolls_question')).'</td></tr>';
 		
@@ -121,7 +122,7 @@ class quickpolls_portal extends portal_generic {
 				}
 			}
 		} else {
-			if ($this->config('pk_quickpolls_closedate') < $this->time->time || (($this->in->get('quickpolls_results', 0)==$this->id) && $this->config('pk_quickpolls_showresults')) || ($this->userVoted())){
+			if (($this->config('pk_quickpolls_closedate') > 0 && ($this->config('pk_quickpolls_closedate') < $this->time->time)) || (($this->in->get('quickpolls_results', 0)==$this->id) && $this->config('pk_quickpolls_showresults')) || ($this->userVoted())){
 				$myout .= $this->showResults();
 			} else {
 				$myout .= $this->showForm();
