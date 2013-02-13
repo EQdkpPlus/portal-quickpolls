@@ -35,5 +35,6 @@ $lang = array(
 	'pk_quickpolls_options_help'	=> 'Eine Option für die Schnellumfrage pro Zeile eintragen',
 	'pk_quickpolls_vote'	=> 'Abstimmen',
 	'pk_quickpolls_resuls'	=> 'Ergebnisse',
+	'pk_quickpolls_resetvotes' => 'Abstimmungen zurücksetzen',
 );
 ?>

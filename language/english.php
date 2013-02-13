@@ -35,5 +35,6 @@ $lang = array(
 	'pk_quickpolls_options_help'	=> 'Insert one Option per row',
 	'pk_quickpolls_vote'	=> 'Vote',
 	'pk_quickpolls_resuls'	=> 'Results',
+	'pk_quickpolls_resetvotes' => 'Reset votes',
 );
 ?>

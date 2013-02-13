@@ -70,6 +70,12 @@ class quickpolls_portal extends portal_generic {
 			'rows'		=> 10,
 			'cols'		=> 40,
 		),
+		'pk_quickpolls_resetvotes'	=> array(
+			'name'		=> 'pk_quickpolls_resetvotes',
+			'language'	=> 'pk_quickpolls_resetvotes',
+			'property'	=> 'boolean',
+			'help'		=> '',
+		),
 	);
 	protected $install	= array(
 		'autoenable'		=> '0',
@@ -97,6 +103,13 @@ class quickpolls_portal extends portal_generic {
 	);
 
 	public function output() {
+		//reset votes
+		if ($this->config('pk_quickpolls_resetvotes')){
+			$this->reset_votes();
+			$this->set_config('pk_quickpolls_resetvotes', 0);
+		}
+	
+	
 		if($this->config('pk_quickpolls_title')){
 			$this->header = sanitize($this->config('pk_quickpolls_title'));
 		}
@@ -136,6 +149,11 @@ class quickpolls_portal extends portal_generic {
 		return $myout;
 	}
 	
+	private function reset_votes(){
+		$this->db->query("DELETE FROM __quickpolls WHERE id=?",false, $this->id);
+		$this->db->query("DELETE FROM __quickpolls_votes WHERE poll_id=?",false,$this->id);
+	}
+	
 	private function showResults(){
 		$arrOptions = explode("\n", $this->config('pk_quickpolls_options'));
 		$myout = "";
@@ -155,6 +173,7 @@ class quickpolls_portal extends portal_generic {
 		}
 		
 		foreach ($arrOptions as $key => $value){
+			if (trim($value) == '') continue; 
 			$optionCount = (isset($arrVoteResult[$key])) ? $arrVoteResult[$key] : 0;
 			$optionProcent = ($count == 0) ? 0 : round(($optionCount / $count)*100);
 			$myout .= $this->jquery->progressbar('quickpolls_'.$this->id.'_'.$key, $optionProcent, array('text' => trim($value).': '.$optionCount.' (%percentage%)', 'txtalign' => 'left'));
@@ -165,7 +184,11 @@ class quickpolls_portal extends portal_generic {
 	}
 	
 	private function showForm(){
-		$arrOptions = explode("\n", $this->config('pk_quickpolls_options'));
+		$arrTmpOptions = explode("\n", $this->config('pk_quickpolls_options'));
+		foreach($arrTmpOptions as $key => $value){
+			if (trim($value) == '') continue;
+			$arrOptions[$key] = $value;
+		}
 		
 		$myout = '
 		<form action="" method="post">
