@@ -101,6 +101,8 @@ class quickpolls_portal extends portal_generic {
 		  PRIMARY KEY  (`id`)
 		) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;",
 	);
+	
+	private $blnShowResults = false;
 
 	public function output() {
 		//reset votes
@@ -109,43 +111,37 @@ class quickpolls_portal extends portal_generic {
 			$this->set_config('pk_quickpolls_resetvotes', 0);
 		}
 	
-	
 		if($this->config('pk_quickpolls_title')){
 			$this->header = sanitize($this->config('pk_quickpolls_title'));
 		}
-		$myout = '<table cellspacing="0" cellpadding="2" width="100%"><tr><td>';
-		
-		$myout .= sanitize($this->config('pk_quickpolls_question')).'</td></tr>';
-		
 		$this->tpl->add_css("
 			.quickpolls_radio label{
 			   display: block;
 			   margin-bottom: -10px;
 			 }
 		");
-		$myout .= '<tr><td>';
+		
+		$myout = '<div>'.sanitize($this->config('pk_quickpolls_question')).'</div><br />';
+
 		if ($this->in->exists('quickpolls_'.$this->id)){
 			$blnResult = $this->performVote();
 			if ($blnResult){
 				$myout .= $this->showResults();
 			} else {
 				$myout .= $this->showForm();
-				if ($this->config('pk_quickpolls_showresults')){
-					$myout .= '</td></tr><tr><td><a href="'.$this->SID.'&amp;quickpolls_results='.$this->id.'">'.$this->user->lang('pk_quickpolls_resuls').'</a>';
-				}
+				
 			}
 		} else {
 			if (($this->config('pk_quickpolls_closedate') > 0 && ($this->config('pk_quickpolls_closedate') < $this->time->time)) || (($this->in->get('quickpolls_results', 0)==$this->id) && $this->config('pk_quickpolls_showresults')) || ($this->userVoted())){
 				$myout .= $this->showResults();
 			} else {
 				$myout .= $this->showForm();
-				if ($this->config('pk_quickpolls_showresults')){
-					$myout .= '</td></tr><tr><td><a href="'.$this->SID.'&amp;quickpolls_results='.$this->id.'">'.$this->user->lang('pk_quickpolls_resuls').'</a>';
-				}
 			}
 		}
-		$myout .= '</td></tr>';		
-		$myout .= '</table>';
+		
+		if ($this->config('pk_quickpolls_showresults') && !$this->blnShowResults){
+			$myout .= '<br /><div><a href="'.$this->SID.'&amp;quickpolls_results='.$this->id.'">'.$this->user->lang('pk_quickpolls_resuls').'</a></div>';
+		}
 		return $myout;
 	}
 	
@@ -155,6 +151,7 @@ class quickpolls_portal extends portal_generic {
 	}
 	
 	private function showResults(){
+		$this->blnShowResults = true;
 		$arrOptions = explode("\n", $this->config('pk_quickpolls_options'));
 		$myout = "";
 		//Get Results
@@ -194,7 +191,7 @@ class quickpolls_portal extends portal_generic {
 		<form action="" method="post">
 				<div class="quickpolls_radio">'.$this->html->RadioBox('quickpolls_'.$this->id, $arrOptions, 'none').'</div>
 				<input type="hidden" name="'.$this->user->csrfPostToken().'" value="'.$this->user->csrfPostToken().'"/>
-				<input type="submit" value="'.$this->user->lang('pk_quickpolls_vote').'"/>
+				<button type="submit"><i class="icon-check"></i> '.$this->user->lang('pk_quickpolls_vote').'</button>
 		</form>
 		';
 		return $myout;
