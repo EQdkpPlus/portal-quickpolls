@@ -262,5 +262,4 @@ class quickpolls_portal extends portal_generic {
 		$this->pdc->del('portal.module.quickpolls');
 	}
 }
-if(version_compare(PHP_VERSION, '5.3.0', '<')) registry::add_const('short_quickpolls_portal', quickpolls_portal::__shortcuts());
 ?>
