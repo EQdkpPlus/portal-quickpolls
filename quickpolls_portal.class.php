@@ -22,7 +22,7 @@ if ( !defined('EQDKP_INC') ){
 
 class quickpolls_portal extends portal_generic {
 	public static function __shortcuts() {
-		$shortcuts = array('core', 'config', 'db', 'pdc', 'html', 'in', 'tpl', 'user', 'env', 'time', 'jquery');
+		$shortcuts = array('core', 'config', 'db', 'pdc', 'html', 'in', 'tpl', 'user', 'env', 'time', 'jquery', 'db2');
 		return array_merge(parent::$shortcuts, $shortcuts);
 	}
 
