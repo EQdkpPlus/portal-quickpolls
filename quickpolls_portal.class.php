@@ -146,8 +146,8 @@ class quickpolls_portal extends portal_generic {
 	}
 	
 	private function reset_votes(){
-		$this->db->query("DELETE FROM __quickpolls WHERE id=?",false, $this->id);
-		$this->db->query("DELETE FROM __quickpolls_votes WHERE poll_id=?",false,$this->id);
+		$this->db2->prepare("DELETE FROM __quickpolls WHERE id=?")->execute($this->id);
+		$this->db2->prepare("DELETE FROM __quickpolls_votes WHERE poll_id=?")->execute($this->id);
 	}
 	
 	private function showResults(){
@@ -155,18 +155,20 @@ class quickpolls_portal extends portal_generic {
 		$arrOptions = explode("\n", $this->config('pk_quickpolls_options'));
 		$myout = "";
 		//Get Results
-		$query = $this->db->query('SELECT * FROM __quickpolls WHERE id=?', false, $this->id);
-		$arrResult = $this->db->fetch_row($query);
 		$count = 0;
-		if ($arrResult) {
-			$arrVoteResult = unserialize($arrResult['results']);
-			foreach ($arrVoteResult as $key=>$value){
-				$count += $value;
-			}
-		} else {
-			foreach ($arrOptions as $key=>$value){
-				$arrVoteResult[$key] = 0;
-			}
+		$objQuery = $this->db2->prepare("SELECT * FROM __quickpolls WHERE id=?")->execute($this->id);
+		if ($objQuery){
+			$arrResult = $objQuery->fetchAssoc();
+			if ($arrResult->numRows > 0){
+				$arrVoteResult = unserialize($arrResult['results']);
+				foreach ($arrVoteResult as $key=>$value){
+					$count += $value;
+				}		
+			} else {
+				foreach ($arrOptions as $key=>$value){
+					$arrVoteResult[$key] = 0;
+				}
+			}		
 		}
 		
 		foreach ($arrOptions as $key => $value){
@@ -200,41 +202,43 @@ class quickpolls_portal extends portal_generic {
 	private function performVote(){
 		if (!$this->userVoted()){
 			//Get Results
-			$query = $this->db->query('SELECT * FROM __quickpolls WHERE id=?', false, $this->id);
-			$arrResult = $this->db->fetch_row($query);			
-			if (!$arrResult){
-				$arrOptions = explode("\n", $this->config('pk_quickpolls_options'));
-				$arrVoteResult = array();
-				foreach ($arrOptions as $key=>$value){
-					$arrVoteResult[$key] = 0;
-				}
-				//Increase Vote
-				$intSelected = $this->in->get('quickpolls_'.$this->id, 0);
-				$arrVoteResult[$intSelected] = $arrVoteResult[$intSelected] + 1;
-				
-				//Insert
-				$this->db->query("INSERT INTO __quickpolls :params", array(
-					'id'	=> $this->id,
-					'tstamp' => $this->time->time,
-					'results' => serialize($arrVoteResult),
-				));
-			} else {
-				$arrVoteResult = unserialize($arrResult['results']);
-				//Increase Vote
-				$intSelected = $this->in->get('quickpolls_'.$this->id, 0);
-				if (isset($arrVoteResult[$intSelected])){
-					$arrVoteResult[$intSelected] = $arrVoteResult[$intSelected] + 1;
+			$objQuery = $this->db2->prepare("SELECT * FROM __quickpolls WHERE id=?")->execute($this->id);
+			if ($objQuery) {
+				$arrResult = $objQuery->fetchAssoc();
+				if ($arrResult->numRows){
+					$arrVoteResult = unserialize($arrResult['results']);
+					//Increase Vote
+					$intSelected = $this->in->get('quickpolls_'.$this->id, 0);
+					if (isset($arrVoteResult[$intSelected])){
+						$arrVoteResult[$intSelected] = $arrVoteResult[$intSelected] + 1;
+					} else {
+						$arrVoteResult[$intSelected] = 1;
+					}
+					
+					//Update
+					$this->db2->prepare("UPDATE __quickpolls :p WHERE id=?")->set(array(
+						'tstamp' => $this->time->time,
+						'results' => serialize($arrVoteResult),
+					))->execute($this->id);
 				} else {
-					$arrVoteResult[$intSelected] = 1;
-				}
-				
-				//Update
-				$this->db->query("UPDATE __quickpolls SET :params WHERE id=?", array(
-					'tstamp' => $this->time->time,
-					'results' => serialize($arrVoteResult),
-				), $this->id);
-			
+					$arrOptions = explode("\n", $this->config('pk_quickpolls_options'));
+					$arrVoteResult = array();
+					foreach ($arrOptions as $key=>$value){
+						$arrVoteResult[$key] = 0;
+					}
+					//Increase Vote
+					$intSelected = $this->in->get('quickpolls_'.$this->id, 0);
+					$arrVoteResult[$intSelected] = $arrVoteResult[$intSelected] + 1;
+					
+					//Insert
+					$this->db2->prepare("INSERT INTO __quickpolls :p")->set(array(
+						'id'	=> $this->id,
+						'tstamp' => $this->time->time,
+						'results' => serialize($arrVoteResult),
+					))->execute();	
+				}		
 			}
+
 			$this->recordUserVote();
 			return true;
 		}
@@ -243,17 +247,22 @@ class quickpolls_portal extends portal_generic {
 	
 	private function recordUserVote(){
 		if ($this->user->is_signedin()){
-			$this->db->query('INSERT INTO __quickpolls_votes :params', array(
-				'poll_id' => $this->id,
-				'user_id' => $this->user->id,
-			));
+			$this->db2->prepare("INSERT INTO __quickpolls_votes :p")->set(
+				array(
+					'poll_id' => $this->id,
+					'user_id' => $this->user->id,
+				)
+			)->execute();
 		}
 	}
 	
 	private function userVoted(){
 		if ($this->user->is_signedin()){
-			$query = $this->db->query_first("SELECT COUNT(*) as c FROM __quickpolls_votes WHERE poll_id='".$this->db->escape($this->id)."' AND user_id='".$this->db->escape($this->user->id)."'");
-			if ($query > 0) return true;
+			$objQuery = $this->db2->prepare("SELECT * FROM __quickpolls_votes WHERE poll_id=? AND user_id=?")->execute($this->id, $this->user->id);
+			if($objQuery){
+				$objResult = $objQuery->fetchAssoc();
+				if ($objResult->numRows) return true;
+			}
 		}
 		return false;
 	}
