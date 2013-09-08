@@ -159,7 +159,7 @@ class quickpolls_portal extends portal_generic {
 		$objQuery = $this->db2->prepare("SELECT * FROM __quickpolls WHERE id=?")->execute($this->id);
 		if ($objQuery){
 			$arrResult = $objQuery->fetchAssoc();
-			if ($arrResult->numRows > 0){
+			if ($objQuery->numRows > 0){
 				$arrVoteResult = unserialize($arrResult['results']);
 				foreach ($arrVoteResult as $key=>$value){
 					$count += $value;
@@ -205,7 +205,7 @@ class quickpolls_portal extends portal_generic {
 			$objQuery = $this->db2->prepare("SELECT * FROM __quickpolls WHERE id=?")->execute($this->id);
 			if ($objQuery) {
 				$arrResult = $objQuery->fetchAssoc();
-				if ($arrResult->numRows){
+				if ($objQuery->numRows){
 					$arrVoteResult = unserialize($arrResult['results']);
 					//Increase Vote
 					$intSelected = $this->in->get('quickpolls_'.$this->id, 0);
@@ -260,8 +260,7 @@ class quickpolls_portal extends portal_generic {
 		if ($this->user->is_signedin()){
 			$objQuery = $this->db2->prepare("SELECT * FROM __quickpolls_votes WHERE poll_id=? AND user_id=?")->execute($this->id, $this->user->id);
 			if($objQuery){
-				$objResult = $objQuery->fetchAssoc();
-				if ($objResult->numRows) return true;
+				if ($objQuery->numRows) return true;
 			}
 		}
 		return false;
