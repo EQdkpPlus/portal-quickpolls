@@ -59,7 +59,7 @@ class quickpolls_portal extends portal_generic {
 		'pk_quickpolls_showresults'	=> array(
 			'name'		=> 'pk_quickpolls_showresults',
 			'language'	=> 'pk_quickpolls_showresults',
-			'property'	=> 'boolean',
+			'property'	=> 'radio',
 			'help'		=> 'pk_quickpolls_showresults_help',
 		),
 		'pk_quickpolls_options'	=> array(
@@ -73,7 +73,7 @@ class quickpolls_portal extends portal_generic {
 		'pk_quickpolls_resetvotes'	=> array(
 			'name'		=> 'pk_quickpolls_resetvotes',
 			'language'	=> 'pk_quickpolls_resetvotes',
-			'property'	=> 'boolean',
+			'property'	=> 'radio',
 			'help'		=> '',
 		),
 	);
