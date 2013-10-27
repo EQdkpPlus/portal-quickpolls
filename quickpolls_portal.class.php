@@ -193,7 +193,7 @@ class quickpolls_portal extends portal_generic {
 		<form action="" method="post">
 				<div class="quickpolls_radio">'.$this->html->RadioBox('quickpolls_'.$this->id, $arrOptions, 'none').'</div>
 				<input type="hidden" name="'.$this->user->csrfPostToken().'" value="'.$this->user->csrfPostToken().'"/>
-				<button type="submit"><i class="icon-check"></i> '.$this->user->lang('pk_quickpolls_vote').'</button>
+				<button type="submit"><i class="fa fa-check-square-o"></i> '.$this->user->lang('pk_quickpolls_vote').'</button>
 		</form>
 		';
 		return $myout;
