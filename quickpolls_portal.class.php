@@ -31,6 +31,7 @@ class quickpolls_portal extends portal_generic {
 		'name'			=> 'Quickpolls Module',
 		'version'		=> '0.1.1',
 		'author'		=> 'GodMod',
+		'icon'			=> 'fa-tasks',
 		'contact'		=> EQDKP_PROJECT_URL,
 		'description'	=> 'Create a poll on your EQdkp Plus',
 	);
