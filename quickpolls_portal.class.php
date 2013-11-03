@@ -188,10 +188,10 @@ class quickpolls_portal extends portal_generic {
 			if (trim($value) == '') continue;
 			$arrOptions[$key] = $value;
 		}
-		
+
 		$myout = '
 		<form action="" method="post">
-				<div class="quickpolls_radio">'.$this->html->RadioBox('quickpolls_'.$this->id, $arrOptions, 'none').'</div>
+				<div class="quickpolls_radio">'.new hradio('quickpolls_'.$this->id, array('options' => $arrOptions, 'value' => 'none')).'</div>
 				<input type="hidden" name="'.$this->user->csrfPostToken().'" value="'.$this->user->csrfPostToken().'"/>
 				<button type="submit"><i class="fa fa-check-square-o"></i> '.$this->user->lang('pk_quickpolls_vote').'</button>
 		</form>
