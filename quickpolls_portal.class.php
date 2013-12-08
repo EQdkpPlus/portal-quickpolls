@@ -21,72 +21,52 @@ if ( !defined('EQDKP_INC') ){
 }
 
 class quickpolls_portal extends portal_generic {
-	public static function __shortcuts() {
-		$shortcuts = array('core', 'config', 'db', 'pdc', 'html', 'in', 'tpl', 'user', 'env', 'time', 'jquery', 'db');
-		return array_merge(parent::$shortcuts, $shortcuts);
-	}
 
-	protected $path		= 'quickpolls';
-	protected $data		= array(
+	protected static $path		= 'quickpolls';
+	protected static $data		= array(
 		'name'			=> 'Quickpolls Module',
 		'version'		=> '0.1.1',
 		'author'		=> 'GodMod',
 		'icon'			=> 'fa-tasks',
 		'contact'		=> EQDKP_PROJECT_URL,
 		'description'	=> 'Create a poll on your EQdkp Plus',
+		'lang_prefix'	=> 'quickpolls_',
+		'multiple'		=> true,
 	);
-	protected $positions = array('middle', 'left1', 'left2', 'right', 'bottom');
+	protected static $positions = array('middle', 'left1', 'left2', 'right', 'bottom');
 	protected $settings	= array(
-		'pk_quickpolls_title'	=> array(
-			'name'		=> 'pk_quickpolls_title',
-			'language'	=> 'pk_quickpolls_title',
-			'property'	=> 'text',
+		'title'	=> array(
+			'type'		=> 'text',
 			'size'		=> '40',
 		),
-		'pk_quickpolls_question'	=> array(
-			'name'		=> 'pk_quickpolls_question',
-			'language'	=> 'pk_quickpolls_question',
-			'property'	=> 'text',
+		'question'	=> array(
+			'type'		=> 'text',
 			'size'		=> '40',
-			'help'		=> 'pk_quickpolls_question_help',
 		),
-		'pk_quickpolls_closedate'	=> array(
-			'name'		=> 'pk_quickpolls_closedate',
-			'language'	=> 'pk_quickpolls_closedate',
-			'property'	=> 'datepicker',
-			'help'		=> 'pk_quickpolls_closedate_help',
+		'closedate'	=> array(
+			'type'		=> 'datepicker',
 			'allow_empty' => true,
 		),
-		'pk_quickpolls_showresults'	=> array(
-			'name'		=> 'pk_quickpolls_showresults',
-			'language'	=> 'pk_quickpolls_showresults',
-			'property'	=> 'radio',
-			'help'		=> 'pk_quickpolls_showresults_help',
+		'showresults'	=> array(
+			'type'		=> 'radio',
 		),
-		'pk_quickpolls_options'	=> array(
-			'name'		=> 'pk_quickpolls_options',
-			'language'	=> 'pk_quickpolls_options',
-			'property'	=> 'textarea',
-			'help'		=> 'pk_quickpolls_options_help',
+		'options'	=> array(
+			'type'		=> 'textarea',
 			'rows'		=> 10,
 			'cols'		=> 40,
 		),
-		'pk_quickpolls_resetvotes'	=> array(
-			'name'		=> 'pk_quickpolls_resetvotes',
-			'language'	=> 'pk_quickpolls_resetvotes',
-			'property'	=> 'radio',
+		'resetvotes'	=> array(
+			'type'		=> 'radio',
 			'help'		=> '',
 		),
 	);
-	protected $install	= array(
+	protected static $install	= array(
 		'autoenable'		=> '0',
 		'defaultposition'	=> 'right',
 		'defaultnumber'		=> '4',
 	);
 	
-	protected $multiple = true;
-	
-	protected $sqls		= array(
+	protected static $sqls		= array(
 		"DROP TABLE IF EXISTS __quickpolls_votes;",
 		"CREATE TABLE `__quickpolls_votes` (
 		  `poll_id` int(10) unsigned NOT NULL default '0',
@@ -107,13 +87,13 @@ class quickpolls_portal extends portal_generic {
 
 	public function output() {
 		//reset votes
-		if ($this->config('pk_quickpolls_resetvotes')){
+		if ($this->config('resetvotes')){
 			$this->reset_votes();
-			$this->set_config('pk_quickpolls_resetvotes', 0);
+			$this->set_config('resetvotes', 0);
 		}
 	
-		if($this->config('pk_quickpolls_title')){
-			$this->header = sanitize($this->config('pk_quickpolls_title'));
+		if($this->config('title')){
+			$this->header = sanitize($this->config('title'));
 		}
 		$this->tpl->add_css("
 			.quickpolls_radio label{
@@ -122,7 +102,7 @@ class quickpolls_portal extends portal_generic {
 			 }
 		");
 		
-		$myout = '<div>'.sanitize($this->config('pk_quickpolls_question')).'</div><br />';
+		$myout = '<div>'.sanitize($this->config('question')).'</div><br />';
 
 		if ($this->in->exists('quickpolls_'.$this->id)){
 			$blnResult = $this->performVote();
@@ -133,14 +113,14 @@ class quickpolls_portal extends portal_generic {
 				
 			}
 		} else {
-			if (($this->config('pk_quickpolls_closedate') > 0 && ($this->config('pk_quickpolls_closedate') < $this->time->time)) || (($this->in->get('quickpolls_results', 0)==$this->id) && $this->config('pk_quickpolls_showresults')) || ($this->userVoted())){
+			if (($this->config('closedate') > 0 && ($this->config('closedate') < $this->time->time)) || (($this->in->get('quickpolls_results', 0)==$this->id) && $this->config('showresults')) || ($this->userVoted())){
 				$myout .= $this->showResults();
 			} else {
 				$myout .= $this->showForm();
 			}
 		}
 		
-		if ($this->config('pk_quickpolls_showresults') && !$this->blnShowResults){
+		if ($this->config('showresults') && !$this->blnShowResults){
 			$myout .= '<br /><div><a href="'.$this->SID.'&amp;quickpolls_results='.$this->id.'">'.$this->user->lang('pk_quickpolls_resuls').'</a></div>';
 		}
 		return $myout;
@@ -153,7 +133,7 @@ class quickpolls_portal extends portal_generic {
 	
 	private function showResults(){
 		$this->blnShowResults = true;
-		$arrOptions = explode("\n", $this->config('pk_quickpolls_options'));
+		$arrOptions = explode("\n", $this->config('options'));
 		$myout = "";
 		//Get Results
 		$count = 0;
@@ -184,7 +164,7 @@ class quickpolls_portal extends portal_generic {
 	}
 	
 	private function showForm(){
-		$arrTmpOptions = explode("\n", $this->config('pk_quickpolls_options'));
+		$arrTmpOptions = explode("\n", $this->config('options'));
 		foreach($arrTmpOptions as $key => $value){
 			if (trim($value) == '') continue;
 			$arrOptions[$key] = $value;
@@ -222,7 +202,7 @@ class quickpolls_portal extends portal_generic {
 						'results' => serialize($arrVoteResult),
 					))->execute($this->id);
 				} else {
-					$arrOptions = explode("\n", $this->config('pk_quickpolls_options'));
+					$arrOptions = explode("\n", $this->config('options'));
 					$arrVoteResult = array();
 					foreach ($arrOptions as $key=>$value){
 						$arrVoteResult[$key] = 0;
