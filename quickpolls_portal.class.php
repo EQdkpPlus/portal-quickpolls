@@ -246,9 +246,5 @@ class quickpolls_portal extends portal_generic {
 		}
 		return false;
 	}
-	
-	public function reset() {
-		$this->pdc->del('portal.module.quickpolls');
-	}
 }
 ?>
