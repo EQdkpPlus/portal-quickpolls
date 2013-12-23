@@ -33,8 +33,8 @@ $lang = array(
 	'quickpolls_f_help_showresults'	=> 'Results-Link will be shown, independet from voting-status',
 	'quickpolls_f_options'			=> 'Options',
 	'quickpolls_f_help_options'		=> 'Insert one Option per row',
-	'quickpolls_f_vote'				=> 'Vote',
-	'quickpolls_f_resuls'			=> 'Results',
 	'quickpolls_f_resetvotes' 		=> 'Reset votes',
+	'quickpolls_vote'				=> 'Vote',
+	'quickpolls_resuls'				=> 'Results',
 );
 ?>

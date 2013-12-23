@@ -121,7 +121,7 @@ class quickpolls_portal extends portal_generic {
 		}
 		
 		if ($this->config('showresults') && !$this->blnShowResults){
-			$myout .= '<br /><div><a href="'.$this->SID.'&amp;quickpolls_results='.$this->id.'">'.$this->user->lang('pk_quickpolls_resuls').'</a></div>';
+			$myout .= '<br /><div><a href="'.$this->SID.'&amp;quickpolls_results='.$this->id.'">'.$this->user->lang('quickpolls_resuls').'</a></div>';
 		}
 		return $myout;
 	}
@@ -175,7 +175,7 @@ class quickpolls_portal extends portal_generic {
 		<form action="" method="post">
 				<div class="quickpolls_radio">'.new hradio('quickpolls_'.$this->id, array('options' => $arrOptions, 'value' => 'none')).'</div>
 				<input type="hidden" name="'.$this->user->csrfPostToken().'" value="'.$this->user->csrfPostToken().'"/>
-				<button type="submit"><i class="fa fa-check-square-o"></i> '.$this->user->lang('pk_quickpolls_vote').'</button>
+				<button type="submit"><i class="fa fa-check-square-o"></i> '.$this->user->lang('quickpolls_vote').'</button>
 		</form>
 		';
 		return $myout;

@@ -33,8 +33,8 @@ $lang = array(
 	'quickpolls_f_help_showresults'	=> 'Ergebnis-Link wird angezeigt, unabhängig vom Abstimm-Status',
 	'quickpolls_f_options'			=> 'Optionen',
 	'quickpolls_f_help_options'		=> 'Eine Option für die Schnellumfrage pro Zeile eintragen',
-	'quickpolls_f_vote'				=> 'Abstimmen',
-	'quickpolls_f_resuls'			=> 'Ergebnisse',
 	'quickpolls_f_resetvotes'		=> 'Abstimmungen zurücksetzen',
+	'quickpolls_vote'				=> 'Abstimmen',
+	'quickpolls_resuls'				=> 'Ergebnisse',
 );
 ?>
