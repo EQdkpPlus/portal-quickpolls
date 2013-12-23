@@ -165,6 +165,7 @@ class quickpolls_portal extends portal_generic {
 	
 	private function showForm(){
 		$arrTmpOptions = explode("\n", $this->config('options'));
+		$arrOptions = array();
 		foreach($arrTmpOptions as $key => $value){
 			if (trim($value) == '') continue;
 			$arrOptions[$key] = $value;
