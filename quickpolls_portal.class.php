@@ -83,6 +83,8 @@ class quickpolls_portal extends portal_generic {
 		) DEFAULT CHARSET=utf8 COLLATE=utf8_bin;",
 	);
 	
+	protected static $apiLevel = 20;
+	
 	private $blnShowResults = false;
 
 	public function output() {
