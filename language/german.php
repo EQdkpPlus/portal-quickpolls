@@ -37,6 +37,7 @@ $lang = array(
 	'quickpolls_f_options'			=> 'Optionen',
 	'quickpolls_f_help_options'		=> 'Eine Option für die Schnellumfrage pro Zeile eintragen',
 	'quickpolls_f_resetvotes'		=> 'Abstimmungen zurücksetzen',
+	'quickpolls_f_multiple'			=> 'Mehrfachauswahl erlauben',
 	'quickpolls_vote'				=> 'Abstimmen',
 	'quickpolls_resuls'				=> 'Ergebnisse',
 );

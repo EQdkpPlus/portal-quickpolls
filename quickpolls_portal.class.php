@@ -28,7 +28,7 @@ class quickpolls_portal extends portal_generic {
 	protected static $path		= 'quickpolls';
 	protected static $data		= array(
 		'name'			=> 'Quickpolls Module',
-		'version'		=> '0.2.0',
+		'version'		=> '0.2.1',
 		'author'		=> 'GodMod',
 		'icon'			=> 'fa-tasks',
 		'contact'		=> EQDKP_PROJECT_URL,
@@ -51,6 +51,9 @@ class quickpolls_portal extends portal_generic {
 			'allow_empty' => true,
 		),
 		'showresults'	=> array(
+			'type'		=> 'radio',
+		),
+		'multiple' => array(
 			'type'		=> 'radio',
 		),
 		'options'	=> array(
@@ -176,9 +179,15 @@ class quickpolls_portal extends portal_generic {
 			$arrOptions[$key] = $value;
 		}
 
+		if($this->config('multiple')){
+			$fields = new hcheckbox('quickpolls_'.$this->id, array('options' => $arrOptions, 'value' => 'none'));
+		} else {
+			$fields = new hradio('quickpolls_'.$this->id, array('options' => $arrOptions, 'value' => 'none'));
+		}
+		
 		$myout = '
 		<form action="" method="post">
-				<div class="quickpolls_radio">'.new hradio('quickpolls_'.$this->id, array('options' => $arrOptions, 'value' => 'none')).'</div>
+				<div class="quickpolls_radio">'.$fields.'</div>
 				<input type="hidden" name="'.$this->user->csrfPostToken().'" value="'.$this->user->csrfPostToken().'"/>
 				<button type="submit"><i class="fa fa-check-square-o"></i> '.$this->user->lang('quickpolls_vote').'</button>
 		</form>
@@ -195,13 +204,26 @@ class quickpolls_portal extends portal_generic {
 				if ($objQuery->numRows){
 					$arrVoteResult = unserialize($arrResult['results']);
 					//Increase Vote
-					$intSelected = $this->in->get('quickpolls_'.$this->id, 0);
-					if (isset($arrVoteResult[$intSelected])){
-						$arrVoteResult[$intSelected] = $arrVoteResult[$intSelected] + 1;
+
+					if($this->config('multiple')){
+						$arrSelected = $this->in->getArray('quickpolls_'.$this->id, 'int');
+
+						foreach($arrSelected as $intSelected){
+							if (isset($arrVoteResult[$intSelected])){
+								$arrVoteResult[$intSelected] = $arrVoteResult[$intSelected] + 1;
+							} else {
+								$arrVoteResult[$intSelected] = 1;
+							}
+						}
 					} else {
-						$arrVoteResult[$intSelected] = 1;
+						$intSelected = $this->in->get('quickpolls_'.$this->id, 0);
+						if (isset($arrVoteResult[$intSelected])){
+							$arrVoteResult[$intSelected] = $arrVoteResult[$intSelected] + 1;
+						} else {
+							$arrVoteResult[$intSelected] = 1;
+						}
 					}
-					
+
 					//Update
 					$this->db->prepare("UPDATE __quickpolls :p WHERE id=?")->set(array(
 						'tstamp' => $this->time->time,
@@ -214,8 +236,16 @@ class quickpolls_portal extends portal_generic {
 						$arrVoteResult[$key] = 0;
 					}
 					//Increase Vote
-					$intSelected = $this->in->get('quickpolls_'.$this->id, 0);
-					$arrVoteResult[$intSelected] = $arrVoteResult[$intSelected] + 1;
+					if($this->config('multiple')){
+						$arrSelected = $this->in->getArray('quickpolls_'.$this->id, 'int');
+						foreach($arrSelected as $intSelected){
+							$arrVoteResult[$intSelected] = 1;
+						}
+						
+					} else {
+						$intSelected = $this->in->get('quickpolls_'.$this->id, 0);
+						$arrVoteResult[$intSelected] = 1;
+					}
 					
 					//Insert
 					$this->db->prepare("INSERT INTO __quickpolls :p")->set(array(

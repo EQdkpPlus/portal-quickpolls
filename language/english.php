@@ -45,7 +45,7 @@ $lang = array(
 	"quickpolls_f_resetvotes" => 'Reset votes',
 	"quickpolls_vote" => 'Vote',
 	"quickpolls_resuls" => 'Results',
-	
+	'quickpolls_f_multiple'	=> 'Allow choosing multiple options',
 );
 
 ?>
