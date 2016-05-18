@@ -56,6 +56,9 @@ class quickpolls_portal extends portal_generic {
 		'multiple' => array(
 			'type'		=> 'radio',
 		),
+		'showstatistics' => array(
+			'type'		=> 'radio',
+		),
 		'options'	=> array(
 			'type'		=> 'textarea',
 			'rows'		=> 10,
@@ -166,7 +169,15 @@ class quickpolls_portal extends portal_generic {
 			$optionProcent = ($count == 0) ? 0 : round(($optionCount / $count)*100);
 			$myout .= $this->jquery->progressbar('quickpolls_'.$this->id.'_'.$key, $optionProcent, array('text' => trim($value).': '.$optionCount.' (%percentage%)', 'txtalign' => 'left'));
 		}
-		
+
+		if($this->config('showstatistics'))
+		{
+			$myout .= '<p>'.$this->user->lang('quickpolls_total_votes').': '.$count.'</p>';
+			if($this->config('multiple'))
+			{
+				$myout .= '<p>'.$this->user->lang('quickpolls_participants').': '.$this->getNumberOfUsersVoted().'</p>';
+			}
+		}
 
 		return $myout;
 	}
@@ -273,6 +284,15 @@ class quickpolls_portal extends portal_generic {
 		}
 	}
 	
+	private function getNumberOfUsersVoted()
+	{
+		$objQuery = $this->db->prepare("SELECT * FROM __quickpolls_votes WHERE poll_id=?")->execute($this->id);
+		if ($objQuery)
+		{
+		return $objQuery->numRows;	
+		}
+	}
+
 	private function userVoted(){
 		if ($this->user->is_signedin()){
 			$objQuery = $this->db->prepare("SELECT * FROM __quickpolls_votes WHERE poll_id=? AND user_id=?")->execute($this->id, $this->user->id);
