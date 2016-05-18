@@ -172,11 +172,13 @@ class quickpolls_portal extends portal_generic {
 
 		if($this->config('showstatistics'))
 		{
-			$myout .= '<p>'.$this->user->lang('quickpolls_total_votes').': '.$count.'</p>';
+			$myout .= '<div class="quickpolls_stats"><p>'.$this->user->lang('quickpolls_total_votes').': '.$count.'</p>';
+			$this->tpl->add_css('.quickpolls_stats p{ padding-top: 5px }');
 			if($this->config('multiple'))
 			{
 				$myout .= '<p>'.$this->user->lang('quickpolls_participants').': '.$this->getNumberOfUsersVoted().'</p>';
 			}
+			$myout .= '</div>';
 		}
 
 		return $myout;
