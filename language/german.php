@@ -35,7 +35,7 @@ $lang = array(
 	'quickpolls_f_showresults'		=> 'Ergebnis-Link anzeigen',
 	'quickpolls_f_help_showresults'		=> 'Ergebnis-Link wird angezeigt, unabhängig vom Abstimm-Status',
         'quickpolls_f_showstatistics'           => 'Zeige Statistiken unter den Ergebnissen',
-        'quickpolls_f_help_showstatistics'      => 'Beinhaltet die Anzahl an Abstimmungen und, bei Mehrfachauswahl, die Anzahl der registrierten Teilnehmer',
+        'quickpolls_f_help_showstatistics'      => 'Beinhaltet die Anzahl an Abstimmungen und, bei Mehrfachauswahl, die Anzahl der Teilnehmer (ohne Gäste)',
 	'quickpolls_f_options'			=> 'Optionen',
 	'quickpolls_f_help_options'		=> 'Eine Option für die Schnellumfrage pro Zeile eintragen',
 	'quickpolls_f_resetvotes'		=> 'Abstimmungen zurücksetzen',
@@ -43,6 +43,6 @@ $lang = array(
 	'quickpolls_vote'			=> 'Abstimmen',
 	'quickpolls_resuls'			=> 'Ergebnisse',
 	'quickpolls_total_votes'		=> 'Stimmen gesamt',
-	'quickpolls_participants'		=> 'Registrierte Teilnehmer',
+	'quickpolls_participants'		=> 'Teilnehmer (ohne Gäste)',
 );
 ?>

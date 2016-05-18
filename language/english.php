@@ -41,14 +41,14 @@ $lang = array(
 	'quickpolls_f_showresults'    		=> 'Show Results-Link',
 	'quickpolls_f_help_showresults' 	=> 'Results-Link will be shown, independet from voting-status',
 	'quickpolls_f_showstatistics'		=> 'Display statistics below the results',
-	'quickpolls_f_help_showstatistics'	=> 'This includes the total votes and additionally, for multiple options, registered participants',
+	'quickpolls_f_help_showstatistics'	=> 'This includes the total votes and additionally, for multiple options, the participants (without guests)',
 	'quickpolls_f_options'			=> 'Options',
 	'quickpolls_f_help_options'		=> 'Insert one Option per row',
 	'quickpolls_f_resetvotes'		=> 'Reset votes',
 	'quickpolls_vote'			=> 'Vote',
 	'quickpolls_resuls'			=> 'Results',
 	'quickpolls_total_votes'		=> 'Total votes',
-	'quickpolls_participants'		=> 'Registered participants',
+	'quickpolls_participants'		=> 'Participants (without guests)',
 	'quickpolls_f_multiple'			=> 'Allow choosing multiple options',
 );
 
