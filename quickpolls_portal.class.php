@@ -28,7 +28,7 @@ class quickpolls_portal extends portal_generic {
 	protected static $path		= 'quickpolls';
 	protected static $data		= array(
 		'name'			=> 'Quickpolls Module',
-		'version'		=> '0.2.1',
+		'version'		=> '0.3.0',
 		'author'		=> 'GodMod',
 		'icon'			=> 'fa-tasks',
 		'contact'		=> EQDKP_PROJECT_URL,
@@ -54,6 +54,9 @@ class quickpolls_portal extends portal_generic {
 			'type'		=> 'radio',
 		),
 		'multiple' => array(
+			'type'		=> 'radio',
+		),
+		'showstatistics' => array(
 			'type'		=> 'radio',
 		),
 		'options'	=> array(
@@ -166,7 +169,17 @@ class quickpolls_portal extends portal_generic {
 			$optionProcent = ($count == 0) ? 0 : round(($optionCount / $count)*100);
 			$myout .= $this->jquery->progressbar('quickpolls_'.$this->id.'_'.$key, $optionProcent, array('text' => trim($value).': '.$optionCount.' (%percentage%)', 'txtalign' => 'left'));
 		}
-		
+
+		if($this->config('showstatistics'))
+		{
+			$myout .= '<div class="quickpolls_stats"><p>'.$this->user->lang('quickpolls_total_votes').': '.$count.'</p>';
+			$this->tpl->add_css('.quickpolls_stats p{ padding-top: 5px }');
+			if($this->config('multiple'))
+			{
+				$myout .= '<p>'.$this->user->lang('quickpolls_participants').': '.$this->getNumberOfUsersVoted().'</p>';
+			}
+			$myout .= '</div>';
+		}
 
 		return $myout;
 	}
@@ -273,6 +286,16 @@ class quickpolls_portal extends portal_generic {
 		}
 	}
 	
+	private function getNumberOfUsersVoted()
+	{
+		$objQuery = $this->db->prepare("SELECT count(*) as count FROM __quickpolls_votes WHERE poll_id=?")->execute($this->id);
+		if ($objQuery)
+		{
+			$query = $objQuery->fetchAssoc();	
+			return $query['count'];
+		}
+	}
+
 	private function userVoted(){
 		if ($this->user->is_signedin()){
 			$objQuery = $this->db->prepare("SELECT * FROM __quickpolls_votes WHERE poll_id=? AND user_id=?")->execute($this->id, $this->user->id);

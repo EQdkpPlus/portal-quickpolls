@@ -24,21 +24,25 @@ if ( !defined('EQDKP_INC') ){
 }
 
 $lang = array(
-	'quickpolls'					=> 'Schnellumfrage',
-	'quickpolls_name'				=> 'Schnellumfrage',
-	'quickpolls_desc'				=> 'Erstelle eine Umfrage',
+	'quickpolls'				=> 'Schnellumfrage',
+	'quickpolls_name'			=> 'Schnellumfrage',
+	'quickpolls_desc'			=> 'Erstelle eine Umfrage',
 	'quickpolls_f_title'			=> 'Titel der Umfrage',
 	'quickpolls_f_question'			=> 'Beschreibung',
-	'quickpolls_f_question_help'	=> 'Beschreibung oder Frage für die Schnellumfrage, die unter dem Titel angezeigt werden soll',
+	'quickpolls_f_question_help'		=> 'Beschreibung oder Frage für die Schnellumfrage, die unter dem Titel angezeigt werden soll',
 	'quickpolls_f_closedate'		=> 'Anzeigen bis',
-	'quickpolls_f_help_closedate'	=> 'Nach diesem Datum werden nur noch die Ergebnisse angezeigt, eine Abstimmung ist nicht mehr möglich.',
+	'quickpolls_f_help_closedate'		=> 'Nach diesem Datum werden nur noch die Ergebnisse angezeigt, eine Abstimmung ist nicht mehr möglich.',
 	'quickpolls_f_showresults'		=> 'Ergebnis-Link anzeigen',
-	'quickpolls_f_help_showresults'	=> 'Ergebnis-Link wird angezeigt, unabhängig vom Abstimm-Status',
+	'quickpolls_f_help_showresults'		=> 'Ergebnis-Link wird angezeigt, unabhängig vom Abstimm-Status',
+        'quickpolls_f_showstatistics'           => 'Zeige Statistiken unter den Ergebnissen',
+        'quickpolls_f_help_showstatistics'      => 'Beinhaltet die Anzahl an Abstimmungen und, bei Mehrfachauswahl, die Anzahl der Teilnehmer (ohne Gäste)',
 	'quickpolls_f_options'			=> 'Optionen',
 	'quickpolls_f_help_options'		=> 'Eine Option für die Schnellumfrage pro Zeile eintragen',
 	'quickpolls_f_resetvotes'		=> 'Abstimmungen zurücksetzen',
 	'quickpolls_f_multiple'			=> 'Mehrfachauswahl erlauben',
-	'quickpolls_vote'				=> 'Abstimmen',
-	'quickpolls_resuls'				=> 'Ergebnisse',
+	'quickpolls_vote'			=> 'Abstimmen',
+	'quickpolls_resuls'			=> 'Ergebnisse',
+	'quickpolls_total_votes'		=> 'Stimmen gesamt',
+	'quickpolls_participants'		=> 'Teilnehmer (ohne Gäste)',
 );
 ?>
