@@ -288,10 +288,11 @@ class quickpolls_portal extends portal_generic {
 	
 	private function getNumberOfUsersVoted()
 	{
-		$objQuery = $this->db->prepare("SELECT * FROM __quickpolls_votes WHERE poll_id=?")->execute($this->id);
+		$objQuery = $this->db->prepare("SELECT count(*) as count FROM __quickpolls_votes WHERE poll_id=?")->execute($this->id);
 		if ($objQuery)
 		{
-		return $objQuery->numRows;	
+			$query = $objQuery->fetchAssoc();	
+			return $query['count'];
 		}
 	}
 
