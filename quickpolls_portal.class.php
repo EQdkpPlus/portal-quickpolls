@@ -193,9 +193,9 @@ class quickpolls_portal extends portal_generic {
 		}
 
 		if($this->config('multiple')){
-			$fields = new hcheckbox('quickpolls_'.$this->id, array('options' => $arrOptions, 'value' => 'none'));
+			$fields = (new hcheckbox('quickpolls_'.$this->id, array('options' => $arrOptions, 'value' => 'none')))->output();
 		} else {
-			$fields = new hradio('quickpolls_'.$this->id, array('options' => $arrOptions, 'value' => 'none'));
+			$fields = (new hradio('quickpolls_'.$this->id, array('options' => $arrOptions, 'value' => 'none')))->output();
 		}
 		
 		$myout = '
