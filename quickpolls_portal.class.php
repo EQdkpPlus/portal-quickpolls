@@ -28,7 +28,7 @@ class quickpolls_portal extends portal_generic {
 	protected static $path		= 'quickpolls';
 	protected static $data		= array(
 		'name'			=> 'Quickpolls Module',
-		'version'		=> '0.3.0',
+		'version'		=> '0.3.1',
 		'author'		=> 'GodMod',
 		'icon'			=> 'fa-tasks',
 		'contact'		=> EQDKP_PROJECT_URL,
